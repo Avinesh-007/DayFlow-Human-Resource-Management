@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { AppBar, Avatar, Box, Button, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
-import { DashboardOutlined, Logout, Menu, PeopleOutline, EventAvailableOutlined, PaymentsOutlined, PersonOutline } from '@mui/icons-material';
+import { DashboardOutlined, Logout, Menu, PeopleOutline, EventAvailableOutlined, PaymentsOutlined, PersonOutline, WorkOutline } from '@mui/icons-material';
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -8,7 +8,7 @@ const employeeLinks = [
   { label: 'Dashboard', path: '/dashboard', icon: <DashboardOutlined /> },
   { label: 'Profile', path: '/profile', icon: <PersonOutline /> },
   { label: 'Attendance', path: '/attendance', icon: <EventAvailableOutlined /> },
-  { label: 'Leave', path: '/leave', icon: <EventAvailableOutlined /> },
+  { label: 'Leave', path: '/leave', icon: <WorkOutline /> },
   { label: 'Payroll', path: '/payroll', icon: <PaymentsOutlined /> },
 ];
 const adminLinks = [

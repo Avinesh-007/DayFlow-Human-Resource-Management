@@ -4,6 +4,10 @@ import AppLayout from '../components/layout/AppLayout';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
+import Profile from '../pages/employee/Profile';
+import Attendance from '../pages/employee/Attendance';
+import Leave from '../pages/employee/Leave';
+import Payroll from '../pages/employee/Payroll';
 
 function RequireAuth({ role }) {
   const { user } = useAuth();
@@ -20,6 +24,10 @@ export default function AppRoutes() {
       <Route element={<RequireAuth />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/attendance" element={<Attendance />} />
+          <Route path="/leave" element={<Leave />} />
+          <Route path="/payroll" element={<Payroll />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
