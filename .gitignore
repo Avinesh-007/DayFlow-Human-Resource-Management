@@ -1,0 +1,36 @@
+# =========================
+# Maven / Java
+# =========================
+target/
+*.class
+
+# JVM crash and runtime logs
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# =========================
+# IDE
+# =========================
+.idea/
+.vscode/
+*.iml
+
+# =========================
+# Environment / secrets
+# =========================
+.env
+.env.local
+application-local.properties
+application-local.yml
+
+# =========================
+# Frontend
+# =========================
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.production.local

@@ -8,6 +8,7 @@ import Profile from '../pages/employee/Profile';
 import Attendance from '../pages/employee/Attendance';
 import Leave from '../pages/employee/Leave';
 import Payroll from '../pages/employee/Payroll';
+import AdminPage from '../pages/admin/AdminPage';
 
 function RequireAuth({ role }) {
   const { user } = useAuth();
@@ -24,6 +25,12 @@ export default function AppRoutes() {
       <Route element={<RequireAuth />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route element={<RequireAuth role="ADMIN" />}>
+            <Route path="/employees" element={<AdminPage section="employees" />} />
+            <Route path="/leave-approvals" element={<AdminPage section="leave" />} />
+            <Route path="/admin-attendance" element={<AdminPage section="attendance" />} />
+            <Route path="/admin-payroll" element={<AdminPage section="payroll" />} />
+          </Route>
           <Route path="/profile" element={<Profile />} />
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/leave" element={<Leave />} />

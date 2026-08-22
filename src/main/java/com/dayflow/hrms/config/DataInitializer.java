@@ -1,17 +1,22 @@
 package com.dayflow.hrms.config;
 
-import com.dayflow.hrms.entity.Employee;
-import com.dayflow.hrms.entity.Role;
-import com.dayflow.hrms.entity.User;
-import com.dayflow.hrms.repository.EmployeeRepository;
-import com.dayflow.hrms.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import com.dayflow.hrms.entity.Employee;
+import com.dayflow.hrms.entity.Payroll;
+import com.dayflow.hrms.entity.Role;
+import com.dayflow.hrms.entity.User;
+import com.dayflow.hrms.repository.EmployeeRepository;
+import com.dayflow.hrms.repository.PayrollRepository;
+import com.dayflow.hrms.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Seeds development data on startup.
@@ -27,12 +32,15 @@ public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
+    private final PayrollRepository payrollRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
         seedAdmin();
         seedEmployee();
+        seedPayroll("ADM001", new BigDecimal("85000.00"), new BigDecimal("10000.00"), new BigDecimal("5000.00"));
+        seedPayroll("EMP001", new BigDecimal("65000.00"), new BigDecimal("7500.00"), new BigDecimal("3500.00"));
     }
 
     private void seedAdmin() {
@@ -43,6 +51,7 @@ public class DataInitializer implements CommandLineRunner {
                 .email("admin@dayflow.com")
                 .password(passwordEncoder.encode("Admin@123"))
                 .role(Role.ROLE_ADMIN)
+                .enabled(true)
                 .emailVerified(true)
                 .build();
         userRepository.save(admin);
@@ -71,6 +80,7 @@ public class DataInitializer implements CommandLineRunner {
                 .email("employee@dayflow.com")
                 .password(passwordEncoder.encode("Employee@123"))
                 .role(Role.ROLE_EMPLOYEE)
+                .enabled(true)
                 .emailVerified(true)
                 .build();
         userRepository.save(employee);
@@ -89,5 +99,22 @@ public class DataInitializer implements CommandLineRunner {
         employeeRepository.save(employeeProfile);
 
         log.info("Seeded employee user: employee@dayflow.com");
+    }
+
+    private void seedPayroll(String employeeId, BigDecimal basicSalary, BigDecimal allowances, BigDecimal deductions) {
+        Employee employee = employeeRepository.findByEmployeeId(employeeId).orElse(null);
+        if (employee == null || !payrollRepository.findByEmployeeAndActiveTrue(employee).isEmpty()) return;
+
+        BigDecimal grossSalary = basicSalary.add(allowances);
+        payrollRepository.save(Payroll.builder()
+                .employee(employee)
+                .basicSalary(basicSalary)
+                .allowances(allowances)
+                .deductions(deductions)
+                .grossSalary(grossSalary)
+                .netSalary(grossSalary.subtract(deductions))
+                .effectiveFrom(LocalDate.now().withDayOfMonth(1))
+                .build());
+        log.info("Seeded payroll for employee: {}", employeeId);
     }
 }

@@ -32,11 +32,9 @@ public class User {
     private Role role;
 
     @Column(nullable = false)
-    @Builder.Default
     private boolean enabled = true;
 
     @Column(nullable = false)
-    @Builder.Default
     private boolean emailVerified = false;
 
     private String verificationToken;
